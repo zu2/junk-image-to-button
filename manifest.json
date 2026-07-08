@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "画像イメージをボタンに",
+  "version": "0.1.0",
+  "description": "「※写真はイメージです」等のキャプションが付いた画像を、クリックで表示するボタンに置き換えます。",
+  "permissions": [],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "exclude_matches": [
+        "*://example.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
