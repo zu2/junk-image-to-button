@@ -9,6 +9,7 @@ const CAPTION_PATTERNS = [
   /AI-generatedimage/i,
   /iStock\.com/i,
   /（イメージ）/i,
+  /stock\.adobe\.com/i,
 ];
 
 // Matches .caption, figcaption, .story-media-caption, .photo-caption, etc.
@@ -39,10 +40,8 @@ function findImageNearCaption(captionEl) {
   let node = captionEl.previousElementSibling;
   while (node) {
     if (node.tagName === "IMG") return node;
-    if (node.tagName === "PICTURE") {
-      const nestedImg = node.querySelector && node.querySelector("img");
-      if (nestedImg) return nestedImg;
-    }
+    const imgs = node.querySelectorAll ? node.querySelectorAll("img") : [];
+    if (imgs.length === 1) return imgs[0];
     node = node.previousElementSibling;
   }
   return null;
