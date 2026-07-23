@@ -39,6 +39,10 @@ function findImageNearCaption(captionEl) {
   let node = captionEl.previousElementSibling;
   while (node) {
     if (node.tagName === "IMG") return node;
+    if (node.tagName === "PICTURE") {
+      const nestedImg = node.querySelector && node.querySelector("img");
+      if (nestedImg) return nestedImg;
+    }
     node = node.previousElementSibling;
   }
   return null;
