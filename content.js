@@ -1,4 +1,6 @@
+//
 // Hide "stock photo" captions + their images, replace with a reveal button.
+//
 
 const CAPTION_PATTERNS = [
   /写真はイメージです/,
@@ -8,29 +10,40 @@ const CAPTION_PATTERNS = [
   /Unsplash/i,
   /AI-generatedimage/i,
   /iStock\.com/i,
-  /イメージ/i,
   /stock\.adobe\.com/i,
+  /ゲッティイメージ/i,
 ];
 
-// Matches .caption, figcaption, .story-media-caption, .photo-caption, etc.
+const WEAK_PATTERNS = [
+	/イメージ/i
+];
+
 const CAPTION_SELECTORS = [
   "figcaption",
   '[class*="caption"]',
   "img + .source",
   "figure",
+  "p",
 ];
+
 
 const DONE_ATTR = "data-img-reveal-done";
 const originalDisplays = new WeakMap();
 
 function isCaption(el) {
   const text = (el.textContent || "").replace(/\s+/g, "");
-  return CAPTION_PATTERNS.some((re) => re.test(text));
+  const patterns = text.length <= 40
+    ? CAPTION_PATTERNS.concat(WEAK_PATTERNS)
+    : CAPTION_PATTERNS;
+  return patterns.some((re) => re.test(text));
 }
 
 // Find image: try preceding siblings first, then fallback to closest figure
 function findImageNearCaption(captionEl) {
   if (captionEl.tagName === "FIGURE") {
+    return captionEl.querySelector("img");
+  }
+  if (captionEl.querySelectorAll("img").length === 1) {
     return captionEl.querySelector("img");
   }
   const figure = captionEl.closest("figure");
@@ -85,7 +98,7 @@ function run() {
     if (!img) return;
     const label = (el.textContent || "").trim();
     hideImageWithButton(img, label);
-    if (el.tagName !== "FIGURE") {
+    if (el.tagName !== "FIGURE" && !el.contains(img)) {
       hideElement(el);
     }
   });
