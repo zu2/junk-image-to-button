@@ -10,6 +10,7 @@ const CAPTION_PATTERNS = [
   /Unsplash/i,
   /AI-generatedimage/i,
   /iStock\.com/i,
+  /PhotobyiStock/i,
   /stock\.adobe\.com/i,
   /ゲッティイメージ/i,
 ];
